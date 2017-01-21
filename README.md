@@ -1,5 +1,8 @@
 # graflow
 
+[![npm version](https://badge.fury.io/js/graflow.svg)](https://badge.fury.io/js/graflow)
+[![Build Status](https://travis-ci.org/pmros/graflow.svg)](https://travis-ci.org/pmros/graflow)
+
 **graflow** is a stream library for Javascript where flow is defined as a graph.
 
 **graflow** is small and has no dependencies.
