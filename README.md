@@ -76,7 +76,7 @@ It doesn't look awesome, I know. But this is just little example. The important 
 
 Note that previous example can be coded in a shorter way:
 ```js
-  import { component, map, filter } from 'graflow'
+  import { component } from 'graflow'
 
   const myComponent = component((v, next) => {
     for(let i = v+1; i<=5; i++) next(i)
