@@ -72,7 +72,7 @@ It doesn't look awesome, I know. But this is just little example. The important 
 - Easy to compose (map and filter are just components, like myComponent).
 - Easy to sketch graphically.
 
-![example01 diagram](https://cdn.rawgit.com/pmros/graflow/bf7e6f7b/diagrams/example01.svg)
+![example01 diagram](https://rawgit.com/pmros/graflow/master/diagrams/example01.svg)
 
 Note that previous example can be coded in a shorter way:
 ```js
