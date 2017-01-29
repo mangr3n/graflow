@@ -13,7 +13,7 @@ There are many stream libraries for Javascript, for example [RxJS](https://githu
 
 On the other hand, most stream libraries use to define data flow through method chaining. **graflow** defines data flow declaratively, through a data structure: a graph. And you can apply many transformations or opeations to a graph, for example, you could convert the graph into a diagram or apply automatic optimizatins or verifications.
 
-## Instalation
+## Installation
 **graflow** is packaged as an [UMD module](https://github.com/umdjs/umd) and you can find it at npm repository. It works on node.js and moder browsers.
 
 You can use at node.js
@@ -33,6 +33,8 @@ or loading graph.js or graph.min.js (/dist directory) directly
 
 ## Usage
 **graflow** is a set of component factories, that is functions that return a new component.
+
+You can think about a component like a blackbox that receive async signals and outputs async signals. It's like a chip in a electric circuit.
 
 A component example:
 ```js
