@@ -110,6 +110,10 @@ Note that previous example can be coded in a shorter way:
 - [`debug(msg, log = console.log)`](#debug)
 - [`log(print = console.log)`](#log)
 
+## Projects using graflow
+
+- [cyclow](https://github.com/pmros/cyclow)
+
 ## TODO
 - [ ] Better documentation
 - [ ] More component factories
