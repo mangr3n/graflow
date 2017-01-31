@@ -60,24 +60,25 @@ const node = onNext => {
   return obj
 }
 
-const select = (name, components, io = 'inputs') => {
-  const direction = io === 'inputs' ? 'inputs' : 'outputs'
+const select = (name, components, io = 'input') => {
+  const direction = io === 'input' ? 'inputs' : 'outputs'
   let [componentName, streamName] = name.split('.', 2)
-
+  let ioStreams
   const component = components[componentName]
-  if(component === undefined) return undefined
-  const ioStreams = component[direction]
-  if(ioStreams === undefined) return undefined
-  if(streamName === undefined) {
-    const ioNames = Object.keys(ioStreams)
-    if(ioNames.length != 1) return undefined
-    streamName = ioNames[0]
+
+  if(component !== undefined) {
+    ioStreams = component[direction]
+    if(ioStreams !== undefined && streamName === undefined) {
+      const ioNames = Object.keys(ioStreams)
+      if(ioNames.length === 1) streamName = ioNames[0]
+    }
   }
 
-  if(ioStreams[streamName] === undefined)
+  if(ioStreams === undefined || ioStreams[streamName] === undefined) {
     throw `${io} stream ${name} not found!`
-  else
-    return ioStreams[streamName]
+  }
+
+  return ioStreams[streamName]
 }
 
 const component2 = ({components,
@@ -100,8 +101,8 @@ const component2 = ({components,
   components.out = { inputs: outNodes, outputs: outNodes }
 
   connections.forEach(([from, to]) => {
-    let streamOut = select(from, components, 'outputs')
-    let streamIn  = select(to, components, 'inputs')
+    let streamOut = select(from, components, 'output')
+    let streamIn  = select(to, components, 'input')
 
     streamOut.addListener(streamIn)
   })
