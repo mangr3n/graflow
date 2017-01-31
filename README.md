@@ -1,11 +1,10 @@
 # graflow
 
 [![npm version](https://badge.fury.io/js/graflow.svg)](https://badge.fury.io/js/graflow)
+[![Standard - JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](http://standardjs.com/)
 [![Build Status](https://travis-ci.org/pmros/graflow.svg)](https://travis-ci.org/pmros/graflow)
 
-**graflow** is a stream library for Javascript where flow is defined as a graph.
-
-**graflow** is small and has no dependencies.
+**graflow** is a stream library for Javascript where flow is defined as a graph. It's small and has no dependencies.
 
 ## Why graflow?
 
@@ -32,26 +31,26 @@ or loading graph.js or graph.min.js (/dist directory) directly
 ```
 
 ## Usage
-**graflow** is a set of component factories, that is functions that return a new component.
+**graflow** is a set of component factories, that is functions that return a new component. By convention, every factory name is capitalized. Don't use `new` keyword with graflow factories.
 
 You can think about a component like a blackbox that receive async signals and outputs async signals. It's like a chip in a electric circuit.
 
 A component example:
 ```js
-  import { component, map, filter } from 'graflow'
+  import { Component, Mapper, Filter } from 'graflow'
 
-  const myComponent = component({
-    inputs: [ 'from' ]
-    , outputs: [ 'item' ]
-    , components: {
-      inc: map(v => v + 1)
-      , limit: filter(v => v <= 5)
-    }
-    , connections: [
-      ['in.from', 'inc']
-      , ['inc', 'limit']
-      , ['limit', 'out.item']
-      , ['limit', 'inc']
+  const myComponent = Component({
+    inputs: ['from'],
+    outputs: ['item'],
+    components: {
+      inc: Mapper(v => v + 1),
+      limit: Filter(v => v <= 5)
+    },
+    connections: [
+      ['in.from', 'inc'],
+      ['inc', 'limit'],
+      ['limit', 'out.item'],
+      ['limit', 'inc']
     ]
   })
 
@@ -78,7 +77,7 @@ It doesn't look awesome, I know. But this is just little example. The important 
 
 Note that previous example can be coded in a shorter way:
 ```js
-  import { component } from 'graflow'
+  import Component from 'graflow'
 
   const myComponent = component((v, next) => {
     for(let i = v+1; i<=5; i++) next(i)
@@ -90,25 +89,26 @@ Note that previous example can be coded in a shorter way:
 
 ## API
 
-- [`component({inputs, outputs, components, connections})`](#component1)
-- [`component(func)`](#component2)
-- [`map(func)`](#map)
-- [`filter(func)`](#filter)
-- [`mux(...inputs)`](#mux)
-- [`demux(...outputs)`](#demux)
-- [`chain(...components)`](#chain)
-- [`accumulate`](#accumulate)
-- [`check(condition)`](#check)
-- [`guard(conditions)`](#guard)
-- [`count(initial=0)`](#count)
-- [`repeat(times=1)`](#repeat)
-- [`uniq(initialValue)`](#uniq)
-- [`periodic(ms)`](#periodic)
-- [`delay(ms)`](#delay)
-- [`iterateOnce(iterable)`](#iterateOnce)
-- [`iterateAll(iterable)`](#iterateAll)
-- [`debug(msg, log = console.log)`](#debug)
-- [`log(print = console.log)`](#log)
+- [`Component({inputs, outputs, components, connections})`](#Component1)
+- [`Component(func)`](#Component2)
+- [`Mapper(func)`](#Mapper)
+- [`Filter(func)`](#Filter)
+- [`Muxer(...inputs)`](#Muxer)
+- [`Demuxer(...outputs)`](#Demuxer)
+- [`Chain(...components)`](#Chain)
+- [`Accumulator`](#Accumulator)
+- [`Checker(condition)`](#Checker)
+- [`Guard(conditions)`](#Guard)
+- [`Counter(initial=0)`](#Counter)
+- [`Repeater(times=1)`](#Repeater)
+- [`UniqueFilter(initialValue)`](#UniqueFilter)
+- [`Ticker(ms)`](#Ticker)
+- [`Delayer(ms)`](#Delayer)
+- [`Iterator(iterable)`](#Iterator)
+- [`Serializer()`](#Serializer)
+- [`Debugger(msg, log = console.log)`](#Debugger)
+- [`Logger(log = console.log)`](#Logger)
+- [`Identity()`](#Identity)
 
 ## Projects using graflow
 
