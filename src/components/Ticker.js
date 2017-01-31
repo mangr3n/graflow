@@ -1,6 +1,6 @@
 import Component from '../Component'
 
-const Ticker = (ms, value={}) => Component((v, next) => {
+const Ticker = (ms, value = {}) => Component((v, next) => {
   setInterval(() => next(value), ms)
 })
 

@@ -253,20 +253,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 	
-	var connect = function connect(compOut, compIn) {
-	  var match = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : { default: 'default' };
-	
-	  Object.keys(match).forEach(function (outName) {
-	    var inName = match[outName];
-	    var output = compOut.outputs[outName];
-	    var input = compIn.inputs[inName];
-	
-	    if (output !== undefined && input !== undefined) {
-	      output.connect(input);
-	    }
-	  });
-	};
-	
 	var toComponent = function toComponent(arg) {
 	  if ((typeof arg === 'undefined' ? 'undefined' : _typeof(arg)) === 'object') return arg;
 	  var node = toNode(arg);
@@ -359,7 +345,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	
 	  if (ioStreams === undefined || ioStreams[streamName] === undefined) {
-	    throw io + ' stream ' + name + ' not found!';
+	    throw new Error(io + ' stream ' + name + ' not found!');
 	  }
 	
 	  return ioStreams[streamName];
@@ -406,17 +392,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	    streamOut.addListener(streamIn);
 	  });
 	
-	  var stringsToObj = function stringsToObj(strings, components, direction) {
-	    return strings.reduce(function (acc, name) {
-	      var stream = components[name][direction].default;
-	      acc[name] = stream;
-	      if (strings.length == 1) {
-	        acc.default = stream;
-	      }
-	      return acc;
-	    }, {});
-	  };
-	
 	  var comp = {
 	    start: function start() {
 	      var initialValues = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { default: {} };
@@ -438,7 +413,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	
 	var Component = function Component(arg) {
-	  if (typeof arg === 'function') return toComponent(arg);else return component2(arg);
+	  if (typeof arg === 'function') {
+	    return toComponent(arg);
+	  } else {
+	    return component2(arg);
+	  }
 	};
 	
 	exports.default = Component;
@@ -511,6 +490,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  var initial = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
 	
 	  var value = initial;
+	
 	  return (0, _Component2.default)(function (v, next) {
 	    value++;
 	    next(value);
@@ -551,7 +531,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	          k = _ref2[0],
 	          v = _ref2[1];
 	
-	      return obj[k] = v;
+	      obj[k] = v;
 	    });
 	    next(obj);
 	  });
@@ -923,7 +903,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var Checker = function Checker(cond) {
 	  return (0, _Chain2.default)((0, _Mapper2.default)(function (v) {
-	    if (cond(v)) return { true: v };else return { false: v };
+	    return cond(v) ? { true: v } : { false: v };
 	  }), (0, _Demuxer2.default)('true', 'false'));
 	};
 	

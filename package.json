@@ -15,7 +15,10 @@
     "type": "git",
     "url": "https://github.com/pmros/graflow.git"
   },
-  "keywords": ["stream", "graph"],
+  "keywords": [
+    "stream",
+    "graph"
+  ],
   "author": "pmros <patricioros.dev@gmail.com>",
   "license": "MIT",
   "bugs": {
@@ -42,6 +45,7 @@
     "gulp-plumber": "1.1.0",
     "gulp-rename": "1.2.2",
     "gulp-sourcemaps": "1.6.0",
+    "gulp-standard": "^8.0.3",
     "gulp-uglify": "2.0.0",
     "isparta": "4.0.0",
     "json-loader": "0.5.4",
@@ -54,5 +58,19 @@
   "babelBoilerplateOptions": {
     "entryFileName": "graflow.js",
     "mainVarName": "graflow"
+  },
+  "standard": {
+    "globals": [
+      "describe",
+      "context",
+      "before",
+      "beforeEach",
+      "after",
+      "afterEach",
+      "it",
+      "expect",
+      "spy",
+      "sinon"
+    ]
   }
 }

@@ -6,8 +6,8 @@ describe('Chain', () => {
       Muxer('dividend', 'divisor')
       , Accumulator()
       , Mapper(({dividend, divisor}) => ({
-          quotient:  Math.floor(dividend / divisor)
-        , remainder: dividend % divisor
+        quotient: Math.floor(dividend / divisor),
+        remainder: dividend % divisor
       }))
       , Demuxer('quotient', 'remainder')
     )

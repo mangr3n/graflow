@@ -13,7 +13,7 @@ const Muxer = (...inputs) => {
   })
 
   components.acc = Accumulator()
-  components.filter = Filter((v => inputs.every(i => v[i] !== undefined)))
+  components.filter = Filter(v => inputs.every(i => v[i] !== undefined))
 
   connections.push(
     ['acc', 'filter'],

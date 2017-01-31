@@ -3,9 +3,9 @@ import { Guard } from '../../src/graflow'
 describe('Guard', () => {
   it('should return a component that evaluates the conditions and emit the vale through the correct output', () => {
     const checker = Guard({
-      even: v => v % 2 === 0
-      , greaterThan10: v => v > 10
-      , lesserThan5: v => v < 5
+      even: v => v % 2 === 0,
+      greaterThan10: v => v > 10,
+      lesserThan5: v => v < 5
     })
 
     const listenerEven = spy()

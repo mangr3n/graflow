@@ -8,14 +8,14 @@ const Guard = conds => Chain(
       let others = []
       let match = false
 
-      if(cond === 'otherwise') {
+      if (cond === 'otherwise') {
         others.push(name)
-      } else if(typeof cond === 'function' && cond(v)) {
+      } else if (typeof cond === 'function' && cond(v)) {
         next({[name]: v})
         match = true
       }
 
-      if(!match) others.forEach(name => next({[name]: v}))
+      if (!match) others.forEach(name => next({[name]: v}))
     })
   })
   , Demuxer(...Object.keys(conds))

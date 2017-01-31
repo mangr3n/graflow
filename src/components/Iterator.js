@@ -5,7 +5,7 @@ const Iterator = iterable => {
 
   return Component((v, next) => {
     const {value, done} = iterator.next()
-    if(!done) next(value)
+    if (!done) next(value)
   })
 }
 
