@@ -1,3 +1,8 @@
+### [0.2.0](https://github.com/pmros/graflow/releases/tag/v0.2.0)
+- Better error handling
+- Component factories names refactoring
+- Refactoring to JavasScript Style Guide
+
 ### [0.1.0](https://github.com/pmros/graflow/releases/tag/v0.1.0)
 - Component refactoring and fixes
 - More tests
