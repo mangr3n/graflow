@@ -7,7 +7,7 @@ describe('Ticker', () => {
   after(() => { clock.restore() })
 
   it('should return a  component that emits values or ticks periodically', () => {
-    const timer = Ticker(1000, 'tick')
+    const timer = Ticker(1000, {value: 'tick', initialDelay: true})
     const listener = spy()
 
     timer.outputs.default.on(listener)
