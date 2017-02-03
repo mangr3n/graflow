@@ -96,19 +96,27 @@ Note that previous example can be coded in a shorter way:
 - [`Muxer(...inputs)`](#Muxer)
 - [`Demuxer(...outputs)`](#Demuxer)
 - [`Chain(...components)`](#Chain)
-- [`Accumulator`](#Accumulator)
+- [`Accumulator()`](#Accumulator)
 - [`Checker(condition)`](#Checker)
 - [`Guard(conditions)`](#Guard)
 - [`Counter(initial=0)`](#Counter)
-- [`Repeater(times=1)`](#Repeater)
+- [`Repeater(times)`](#Repeater)
 - [`UniqueFilter(initialValue)`](#UniqueFilter)
 - [`Ticker(ms, options)`](#Ticker)
 - [`Delayer(ms)`](#Delayer)
 - [`Iterator(iterable)`](#Iterator)
 - [`Serializer()`](#Serializer)
-- [`Debugger(msg, log = console.log)`](#Debugger)
+- [`Debugger(options={})`](#Debugger)
 - [`Logger(log = console.log)`](#Logger)
 - [`Identity()`](#Identity)
+
+### <a name="Debugger"></a> `Debugger(options={})`
+Creates a component that takes the input (`default` input), logs it and finally outputs it (`default` output).
+
+Arguments:
+- `options`:
+  - `log`: A function that takes the input value (default: `console.log`).
+  - `prefix`: If specified, a value passed to `log` function before the input value.
 
 ## Projects using graflow
 
