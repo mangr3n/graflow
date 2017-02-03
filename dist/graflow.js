@@ -111,7 +111,16 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	});
 	
-	var _Muxer = __webpack_require__(6);
+	var _Hub = __webpack_require__(6);
+	
+	Object.defineProperty(exports, 'Hub', {
+	  enumerable: true,
+	  get: function get() {
+	    return _interopRequireDefault(_Hub).default;
+	  }
+	});
+	
+	var _Muxer = __webpack_require__(7);
 	
 	Object.defineProperty(exports, 'Muxer', {
 	  enumerable: true,
@@ -120,7 +129,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	});
 	
-	var _Demuxer = __webpack_require__(7);
+	var _Demuxer = __webpack_require__(9);
 	
 	Object.defineProperty(exports, 'Demuxer', {
 	  enumerable: true,
@@ -129,7 +138,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	});
 	
-	var _Iterator = __webpack_require__(8);
+	var _Iterator = __webpack_require__(10);
 	
 	Object.defineProperty(exports, 'Iterator', {
 	  enumerable: true,
@@ -138,7 +147,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	});
 	
-	var _Serializer = __webpack_require__(9);
+	var _Serializer = __webpack_require__(11);
 	
 	Object.defineProperty(exports, 'Serializer', {
 	  enumerable: true,
@@ -147,7 +156,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	});
 	
-	var _Repeater = __webpack_require__(10);
+	var _Repeater = __webpack_require__(12);
 	
 	Object.defineProperty(exports, 'Repeater', {
 	  enumerable: true,
@@ -156,7 +165,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	});
 	
-	var _UniqueFilter = __webpack_require__(11);
+	var _UniqueFilter = __webpack_require__(13);
 	
 	Object.defineProperty(exports, 'UniqueFilter', {
 	  enumerable: true,
@@ -165,7 +174,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	});
 	
-	var _Debugger = __webpack_require__(12);
+	var _Debugger = __webpack_require__(14);
 	
 	Object.defineProperty(exports, 'Debugger', {
 	  enumerable: true,
@@ -174,7 +183,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	});
 	
-	var _Logger = __webpack_require__(13);
+	var _Logger = __webpack_require__(15);
 	
 	Object.defineProperty(exports, 'Logger', {
 	  enumerable: true,
@@ -183,7 +192,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	});
 	
-	var _Chain = __webpack_require__(14);
+	var _Chain = __webpack_require__(8);
 	
 	Object.defineProperty(exports, 'Chain', {
 	  enumerable: true,
@@ -192,7 +201,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	});
 	
-	var _Checker = __webpack_require__(15);
+	var _Checker = __webpack_require__(16);
 	
 	Object.defineProperty(exports, 'Checker', {
 	  enumerable: true,
@@ -201,7 +210,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	});
 	
-	var _Guard = __webpack_require__(16);
+	var _Guard = __webpack_require__(17);
 	
 	Object.defineProperty(exports, 'Guard', {
 	  enumerable: true,
@@ -210,7 +219,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	});
 	
-	var _Identity = __webpack_require__(17);
+	var _Identity = __webpack_require__(18);
 	
 	Object.defineProperty(exports, 'Identity', {
 	  enumerable: true,
@@ -219,7 +228,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	});
 	
-	var _Delayer = __webpack_require__(18);
+	var _Delayer = __webpack_require__(19);
 	
 	Object.defineProperty(exports, 'Delayer', {
 	  enumerable: true,
@@ -228,7 +237,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	});
 	
-	var _Ticker = __webpack_require__(19);
+	var _Ticker = __webpack_require__(20);
 	
 	Object.defineProperty(exports, 'Ticker', {
 	  enumerable: true,
@@ -557,19 +566,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _Mapper2 = _interopRequireDefault(_Mapper);
 	
-	var _Filter = __webpack_require__(3);
-	
-	var _Filter2 = _interopRequireDefault(_Filter);
-	
-	var _Accumulator = __webpack_require__(5);
-	
-	var _Accumulator2 = _interopRequireDefault(_Accumulator);
-	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 	
-	var Muxer = function Muxer() {
+	var Hub = function Hub() {
 	  for (var _len = arguments.length, inputs = Array(_len), _key = 0; _key < _len; _key++) {
 	    inputs[_key] = arguments[_key];
 	  }
@@ -581,22 +582,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    components[i] = (0, _Mapper2.default)(function (v) {
 	      return _defineProperty({}, i, v);
 	    });
-	    connections.push(['in.' + i, i], [i, 'acc']);
+	    connections.push(['in.' + i, i], [i, 'out']);
 	  });
-	
-	  components.acc = (0, _Accumulator2.default)();
-	  components.filter = (0, _Filter2.default)(function (v) {
-	    return inputs.every(function (i) {
-	      return v[i] !== undefined;
-	    });
-	  });
-	
-	  connections.push(['acc', 'filter'], ['filter', 'out.default']);
 	
 	  return (0, _Component2.default)({ components: components, connections: connections, inputs: inputs });
 	};
 	
-	exports.default = Muxer;
+	exports.default = Hub;
 
 /***/ },
 /* 7 */
@@ -608,224 +600,40 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 	
-	var _Component = __webpack_require__(1);
+	var _Chain = __webpack_require__(8);
 	
-	var _Component2 = _interopRequireDefault(_Component);
+	var _Chain2 = _interopRequireDefault(_Chain);
+	
+	var _Hub = __webpack_require__(6);
+	
+	var _Hub2 = _interopRequireDefault(_Hub);
+	
+	var _Accumulator = __webpack_require__(5);
+	
+	var _Accumulator2 = _interopRequireDefault(_Accumulator);
+	
+	var _Filter = __webpack_require__(3);
+	
+	var _Filter2 = _interopRequireDefault(_Filter);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var flatMap = function flatMap(v) {
-	  return [].concat.apply([], v);
-	};
-	
-	var Demuxer = function Demuxer() {
-	  for (var _len = arguments.length, outputs = Array(_len), _key = 0; _key < _len; _key++) {
-	    outputs[_key] = arguments[_key];
+	var Muxer = function Muxer() {
+	  for (var _len = arguments.length, inputs = Array(_len), _key = 0; _key < _len; _key++) {
+	    inputs[_key] = arguments[_key];
 	  }
 	
-	  return (0, _Component2.default)({
-	    components: outputs.reduce(function (acc, output) {
-	      acc[output] = (0, _Component2.default)(function (v, next) {
-	        if (v[output] !== undefined) next(v[output]);
-	      });
-	      return acc;
-	    }, {}),
-	    outputs: outputs,
-	    connections: flatMap(outputs.map(function (out) {
-	      return [['in.default', out], [out, 'out.' + out]];
-	    }))
-	  });
+	  return (0, _Chain2.default)(_Hub2.default.apply(undefined, inputs), (0, _Accumulator2.default)(), (0, _Filter2.default)(function (v) {
+	    return inputs.every(function (i) {
+	      return v[i] !== undefined;
+	    });
+	  }));
 	};
 	
-	exports.default = Demuxer;
+	exports.default = Muxer;
 
 /***/ },
 /* 8 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _Component = __webpack_require__(1);
-	
-	var _Component2 = _interopRequireDefault(_Component);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var Iterator = function Iterator(iterable) {
-	  var iterator = iterable[Symbol.iterator]();
-	
-	  return (0, _Component2.default)(function (v, next) {
-	    var _iterator$next = iterator.next(),
-	        value = _iterator$next.value,
-	        done = _iterator$next.done;
-	
-	    if (!done) next(value);
-	  });
-	};
-	
-	exports.default = Iterator;
-
-/***/ },
-/* 9 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _Component = __webpack_require__(1);
-	
-	var _Component2 = _interopRequireDefault(_Component);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var Serializer = function Serializer() {
-	  return (0, _Component2.default)(function (iterable, next) {
-	    if (iterable[Symbol.iterator]) {
-	      var _iteratorNormalCompletion = true;
-	      var _didIteratorError = false;
-	      var _iteratorError = undefined;
-	
-	      try {
-	        for (var _iterator = iterable[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-	          var i = _step.value;
-	          next(i);
-	        }
-	      } catch (err) {
-	        _didIteratorError = true;
-	        _iteratorError = err;
-	      } finally {
-	        try {
-	          if (!_iteratorNormalCompletion && _iterator.return) {
-	            _iterator.return();
-	          }
-	        } finally {
-	          if (_didIteratorError) {
-	            throw _iteratorError;
-	          }
-	        }
-	      }
-	    }
-	  });
-	};
-	
-	exports.default = Serializer;
-
-/***/ },
-/* 10 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _Component = __webpack_require__(1);
-	
-	var _Component2 = _interopRequireDefault(_Component);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var Repeater = function Repeater() {
-	  var times = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
-	  return (0, _Component2.default)(function (v, next) {
-	    for (var i = 1; i <= times; i++) {
-	      next(v);
-	    }
-	  });
-	};
-	
-	exports.default = Repeater;
-
-/***/ },
-/* 11 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _Component = __webpack_require__(1);
-	
-	var _Component2 = _interopRequireDefault(_Component);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var UniqueFilter = function UniqueFilter(initialValue) {
-	  var lastValue = initialValue;
-	
-	  return (0, _Component2.default)(function (v, next) {
-	    if (v !== lastValue) {
-	      lastValue = v;
-	      next(v);
-	    }
-	  });
-	};
-	
-	exports.default = UniqueFilter;
-
-/***/ },
-/* 12 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _Component = __webpack_require__(1);
-	
-	var _Component2 = _interopRequireDefault(_Component);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var Debugger = function Debugger(msg) {
-	  var log = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : console.log;
-	  return (0, _Component2.default)(function (v, next) {
-	    log(msg, v);
-	    next(v);
-	  });
-	};
-	
-	exports.default = Debugger;
-
-/***/ },
-/* 13 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _Component = __webpack_require__(1);
-	
-	var _Component2 = _interopRequireDefault(_Component);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
-	var Logger = function Logger() {
-	  var log = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : console.log;
-	  return (0, _Component2.default)(function (v) {
-	    return log(v);
-	  });
-	};
-	
-	exports.default = Logger;
-
-/***/ },
-/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -878,6 +686,207 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = Chain;
 
 /***/ },
+/* 9 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _Component = __webpack_require__(1);
+	
+	var _Component2 = _interopRequireDefault(_Component);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var flatMap = function flatMap(v) {
+	  return [].concat.apply([], v);
+	};
+	
+	var Demuxer = function Demuxer() {
+	  for (var _len = arguments.length, outputs = Array(_len), _key = 0; _key < _len; _key++) {
+	    outputs[_key] = arguments[_key];
+	  }
+	
+	  return (0, _Component2.default)({
+	    components: outputs.reduce(function (acc, output) {
+	      acc[output] = (0, _Component2.default)(function (v, next) {
+	        if (v[output] !== undefined) next(v[output]);
+	      });
+	      return acc;
+	    }, {}),
+	    outputs: outputs,
+	    connections: flatMap(outputs.map(function (out) {
+	      return [['in.default', out], [out, 'out.' + out]];
+	    }))
+	  });
+	};
+	
+	exports.default = Demuxer;
+
+/***/ },
+/* 10 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _Component = __webpack_require__(1);
+	
+	var _Component2 = _interopRequireDefault(_Component);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var Iterator = function Iterator(iterable) {
+	  var iterator = iterable[Symbol.iterator]();
+	
+	  return (0, _Component2.default)(function (v, next) {
+	    var _iterator$next = iterator.next(),
+	        value = _iterator$next.value,
+	        done = _iterator$next.done;
+	
+	    if (!done) next(value);
+	  });
+	};
+	
+	exports.default = Iterator;
+
+/***/ },
+/* 11 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _Component = __webpack_require__(1);
+	
+	var _Component2 = _interopRequireDefault(_Component);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var Serializer = function Serializer() {
+	  return (0, _Component2.default)(function (iterable, next) {
+	    if (iterable[Symbol.iterator]) {
+	      var _iteratorNormalCompletion = true;
+	      var _didIteratorError = false;
+	      var _iteratorError = undefined;
+	
+	      try {
+	        for (var _iterator = iterable[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	          var i = _step.value;
+	          next(i);
+	        }
+	      } catch (err) {
+	        _didIteratorError = true;
+	        _iteratorError = err;
+	      } finally {
+	        try {
+	          if (!_iteratorNormalCompletion && _iterator.return) {
+	            _iterator.return();
+	          }
+	        } finally {
+	          if (_didIteratorError) {
+	            throw _iteratorError;
+	          }
+	        }
+	      }
+	    }
+	  });
+	};
+	
+	exports.default = Serializer;
+
+/***/ },
+/* 12 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _Component = __webpack_require__(1);
+	
+	var _Component2 = _interopRequireDefault(_Component);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var Repeater = function Repeater() {
+	  var times = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+	  return (0, _Component2.default)(function (v, next) {
+	    for (var i = 1; i <= times; i++) {
+	      next(v);
+	    }
+	  });
+	};
+	
+	exports.default = Repeater;
+
+/***/ },
+/* 13 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _Component = __webpack_require__(1);
+	
+	var _Component2 = _interopRequireDefault(_Component);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var UniqueFilter = function UniqueFilter(initialValue) {
+	  var lastValue = initialValue;
+	
+	  return (0, _Component2.default)(function (v, next) {
+	    if (v !== lastValue) {
+	      lastValue = v;
+	      next(v);
+	    }
+	  });
+	};
+	
+	exports.default = UniqueFilter;
+
+/***/ },
+/* 14 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _Component = __webpack_require__(1);
+	
+	var _Component2 = _interopRequireDefault(_Component);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var Debugger = function Debugger(msg) {
+	  var log = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : console.log;
+	  return (0, _Component2.default)(function (v, next) {
+	    log(msg, v);
+	    next(v);
+	  });
+	};
+	
+	exports.default = Debugger;
+
+/***/ },
 /* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -887,7 +896,32 @@ return /******/ (function(modules) { // webpackBootstrap
 	  value: true
 	});
 	
-	var _Chain = __webpack_require__(14);
+	var _Component = __webpack_require__(1);
+	
+	var _Component2 = _interopRequireDefault(_Component);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	var Logger = function Logger() {
+	  var log = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : console.log;
+	  return (0, _Component2.default)(function (v) {
+	    return log(v);
+	  });
+	};
+	
+	exports.default = Logger;
+
+/***/ },
+/* 16 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _Chain = __webpack_require__(8);
 	
 	var _Chain2 = _interopRequireDefault(_Chain);
 	
@@ -895,7 +929,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _Mapper2 = _interopRequireDefault(_Mapper);
 	
-	var _Demuxer = __webpack_require__(7);
+	var _Demuxer = __webpack_require__(9);
 	
 	var _Demuxer2 = _interopRequireDefault(_Demuxer);
 	
@@ -910,7 +944,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = Checker;
 
 /***/ },
-/* 16 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -925,11 +959,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _Component2 = _interopRequireDefault(_Component);
 	
-	var _Chain = __webpack_require__(14);
+	var _Chain = __webpack_require__(8);
 	
 	var _Chain2 = _interopRequireDefault(_Chain);
 	
-	var _Demuxer = __webpack_require__(7);
+	var _Demuxer = __webpack_require__(9);
 	
 	var _Demuxer2 = _interopRequireDefault(_Demuxer);
 	
@@ -966,7 +1000,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = Guard;
 
 /***/ },
-/* 17 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -990,7 +1024,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = Identity;
 
 /***/ },
-/* 18 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1016,7 +1050,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = Delayer;
 
 /***/ },
-/* 19 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1031,9 +1065,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var Ticker = function Ticker(ms) {
-	  var value = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+	var Ticker = function Ticker(ms, _ref) {
+	  var _ref$value = _ref.value,
+	      value = _ref$value === undefined ? {} : _ref$value,
+	      _ref$initialDelay = _ref.initialDelay,
+	      initialDelay = _ref$initialDelay === undefined ? false : _ref$initialDelay;
+	
 	  return (0, _Component2.default)(function (v, next) {
+	    if (!initialDelay) next(value);
 	    setInterval(function () {
 	      return next(value);
 	    }, ms);

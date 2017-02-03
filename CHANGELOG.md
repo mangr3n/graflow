@@ -1,3 +1,7 @@
+### [0.2.1](https://github.com/pmros/graflow/releases/tag/v0.2.1)
+- Ticker optional initialDelay
+- Hub: new component factory
+
 ### [0.2.0](https://github.com/pmros/graflow/releases/tag/v0.2.0)
 - Better error handling
 - Component factories names refactoring

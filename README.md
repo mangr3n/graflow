@@ -102,7 +102,7 @@ Note that previous example can be coded in a shorter way:
 - [`Counter(initial=0)`](#Counter)
 - [`Repeater(times=1)`](#Repeater)
 - [`UniqueFilter(initialValue)`](#UniqueFilter)
-- [`Ticker(ms)`](#Ticker)
+- [`Ticker(ms, options)`](#Ticker)
 - [`Delayer(ms)`](#Delayer)
 - [`Iterator(iterable)`](#Iterator)
 - [`Serializer()`](#Serializer)
