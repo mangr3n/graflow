@@ -1,7 +1,11 @@
 import Component from '../Component'
 
-const Debugger = (msg, log = console.log) => Component((v, next) => {
-  log(msg, v)
+const Debugger = ({prefix, log = console.log} = {}) => Component((v, next) => {
+  if (prefix === undefined) {
+    log(v)
+  } else {
+    log(prefix, v)
+  }
   next(v)
 })
 
