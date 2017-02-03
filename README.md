@@ -106,11 +106,10 @@ Note that previous example can be coded in a shorter way:
 - [`Delayer(ms)`](#Delayer)
 - [`Iterator(iterable)`](#Iterator)
 - [`Serializer()`](#Serializer)
-- [`Debugger(options={})`](#Debugger)
-- [`Logger(log = console.log)`](#Logger)
+- [`Logger(options={})`](#Logger)
 - [`Identity()`](#Identity)
 
-### <a name="Debugger"></a> `Debugger(options={})`
+### <a name="Logger"></a> `Logger(options={})`
 Creates a component that takes the input (`default` input), logs it and finally outputs it (`default` output).
 
 Arguments:

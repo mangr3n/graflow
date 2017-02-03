@@ -1,3 +1,9 @@
+### [0.2.3](https://github.com/pmros/graflow/releases/tag/v0.2.3)
+- Cyclic option added to Iterator
+- Logger and Debugger refactored in just Logger
+- Repeater times parameter mandatory
+- Better docs
+
 ### [0.2.2](https://github.com/pmros/graflow/releases/tag/v0.2.2)
 - Ticker fix
 

@@ -174,16 +174,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	});
 	
-	var _Debugger = __webpack_require__(14);
-	
-	Object.defineProperty(exports, 'Debugger', {
-	  enumerable: true,
-	  get: function get() {
-	    return _interopRequireDefault(_Debugger).default;
-	  }
-	});
-	
-	var _Logger = __webpack_require__(15);
+	var _Logger = __webpack_require__(14);
 	
 	Object.defineProperty(exports, 'Logger', {
 	  enumerable: true,
@@ -201,7 +192,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	});
 	
-	var _Checker = __webpack_require__(16);
+	var _Checker = __webpack_require__(15);
 	
 	Object.defineProperty(exports, 'Checker', {
 	  enumerable: true,
@@ -210,7 +201,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	});
 	
-	var _Guard = __webpack_require__(17);
+	var _Guard = __webpack_require__(16);
 	
 	Object.defineProperty(exports, 'Guard', {
 	  enumerable: true,
@@ -219,7 +210,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	});
 	
-	var _Identity = __webpack_require__(18);
+	var _Identity = __webpack_require__(17);
 	
 	Object.defineProperty(exports, 'Identity', {
 	  enumerable: true,
@@ -228,7 +219,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	});
 	
-	var _Delayer = __webpack_require__(19);
+	var _Delayer = __webpack_require__(18);
 	
 	Object.defineProperty(exports, 'Delayer', {
 	  enumerable: true,
@@ -237,7 +228,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  }
 	});
 	
-	var _Ticker = __webpack_require__(20);
+	var _Ticker = __webpack_require__(19);
 	
 	Object.defineProperty(exports, 'Ticker', {
 	  enumerable: true,
@@ -743,12 +734,24 @@ return /******/ (function(modules) { // webpackBootstrap
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var Iterator = function Iterator(iterable) {
+	  var _ref = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+	      _ref$cyclic = _ref.cyclic,
+	      cyclic = _ref$cyclic === undefined ? false : _ref$cyclic;
+	
 	  var iterator = iterable[Symbol.iterator]();
 	
 	  return (0, _Component2.default)(function (v, next) {
 	    var _iterator$next = iterator.next(),
 	        value = _iterator$next.value,
 	        done = _iterator$next.done;
+	
+	    if (done && cyclic) {
+	      iterator = iterable[Symbol.iterator]();
+	      var _iterator$next2 = iterator.next();
+	
+	      value = _iterator$next2.value;
+	      done = _iterator$next2.done;
+	    }
 	
 	    if (!done) next(value);
 	  });
@@ -820,8 +823,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var Repeater = function Repeater() {
-	  var times = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+	var Repeater = function Repeater(times) {
 	  return (0, _Component2.default)(function (v, next) {
 	    for (var i = 1; i <= times; i++) {
 	      next(v);
@@ -876,43 +878,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var Debugger = function Debugger(msg) {
-	  var log = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : console.log;
-	  return (0, _Component2.default)(function (v, next) {
-	    log(msg, v);
-	    next(v);
-	  });
-	};
-	
-	exports.default = Debugger;
-
-/***/ },
-/* 15 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _Component = __webpack_require__(1);
-	
-	var _Component2 = _interopRequireDefault(_Component);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-	
 	var Logger = function Logger() {
-	  var log = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : console.log;
-	  return (0, _Component2.default)(function (v) {
-	    return log(v);
+	  var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+	      prefix = _ref.prefix,
+	      _ref$log = _ref.log,
+	      log = _ref$log === undefined ? console.log : _ref$log;
+	
+	  return (0, _Component2.default)(function (v, next) {
+	    if (prefix === undefined) {
+	      log(v);
+	    } else {
+	      log(prefix, v);
+	    }
+	    next(v);
 	  });
 	};
 	
 	exports.default = Logger;
 
 /***/ },
-/* 16 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -944,7 +929,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = Checker;
 
 /***/ },
-/* 17 */
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1000,7 +985,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = Guard;
 
 /***/ },
-/* 18 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1024,7 +1009,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = Identity;
 
 /***/ },
-/* 19 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1050,7 +1035,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	exports.default = Delayer;
 
 /***/ },
-/* 20 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
