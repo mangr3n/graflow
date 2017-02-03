@@ -1065,8 +1065,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	var Ticker = function Ticker(ms, _ref) {
-	  var _ref$value = _ref.value,
+	var Ticker = function Ticker(ms) {
+	  var _ref = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+	      _ref$value = _ref.value,
 	      value = _ref$value === undefined ? {} : _ref$value,
 	      _ref$initialDelay = _ref.initialDelay,
 	      initialDelay = _ref$initialDelay === undefined ? false : _ref$initialDelay;
