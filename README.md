@@ -33,29 +33,27 @@ or loading graph.js or graph.min.js (/dist directory) directly
 ## Usage
 **graflow** is a set of component factories, that is functions that return a new component. By convention, every factory name is capitalized. Don't use `new` keyword with graflow factories.
 
-You can think about a component like a blackbox that receive async signals and outputs async signals. It's like a chip in a electric circuit.
+You can think about a [component](#Component) like a blackbox that receive async signals and outputs async signals. It's like a microchip in a electric circuit.
 
 A component example:
 ```js
   import { Component, Mapper, Filter } from 'graflow'
 
   const myComponent = Component({
-    inputs: ['from'],
-    outputs: ['item'],
     components: {
       inc: Mapper(v => v + 1),
       limit: Filter(v => v <= 5)
     },
     connections: [
-      ['in.from', 'inc'],
+      ['in', 'inc'],
       ['inc', 'limit'],
-      ['limit', 'out.item'],
+      ['limit', 'out'],
       ['limit', 'inc']
     ]
   })
 
-  myComponent.outputs.item.on(console.log)
-  myComponent.inputs.from.send(2)
+  myComponent.on(console.log)
+  myComponent.send(2)
 ```
 
 If you run that code, you'll see this result:
@@ -65,13 +63,13 @@ If you run that code, you'll see this result:
   5
 ```
 
-`myComponent` receive an input (from = 2) and emit values up to 5.
+`myComponent` receive an input (2) and emit values up to 5.
 It doesn't look awesome, I know. But this is just little example. The important things here are:
-- Async inputs/outputs (from, item).
-- Cycles easily made (inc->limit->inc).
-- Declarative way: a graph (inputs, outputs, components are nodes, connections are edges).
-- Easy to compose (map and filter are just components, like myComponent).
-- Easy to sketch graphically.
+- **Async** inputs/outputs (from, item).
+- **Cycles** easily made (inc->limit->inc).
+- **Declarative** way: a graph (inputs, outputs, components are nodes, connections are edges).
+- Easy to **compose** (map and filter are just components, like myComponent).
+- Easy to **sketch** graphically.
 
 ![example01 diagram](https://rawgit.com/pmros/graflow/master/diagrams/example01.svg)
 
@@ -79,13 +77,25 @@ Note that previous example can be coded in a shorter way:
 ```js
   import Component from 'graflow'
 
-  const myComponent = component((v, next) => {
+  const myComponent = Component((v, next) => {
     for(let i = v+1; i<=5; i++) next(i)
   })
 
-  myComponent.outputs.default.on(console.log)
-  myComponent.inputs.default.send(2)
+  myComponent.on(console.log)
+  myComponent.send(2)
 ```
+
+## <a name="Component"></a> Component
+A graflow component is an object with async inputs and outputs (also called ports). Every component has at least a `default` input and a `default` output.
+
+You can send messages to component with `send` method:
+- `send(port, value)`: `port` is the name of the input you send the `value`.
+- `send(value)`: send to `default` input.
+- `send()`: send default value `{}` to `default` input.
+
+You can listen to component outputs with `on` method:
+- `on(port, listener)`: `port` is the name of the output that `listener` function is listenning.
+- `on(listener)`: listen to `default` output.
 
 ## API
 
@@ -97,6 +107,7 @@ Note that previous example can be coded in a shorter way:
 - [`Demuxer(...outputs)`](#Demuxer)
 - [`Chain(...components)`](#Chain)
 - [`Accumulator()`](#Accumulator)
+- [`Memorizer()`](#Memorizer)
 - [`Checker(condition)`](#Checker)
 - [`Guard(conditions)`](#Guard)
 - [`Counter(initial=0)`](#Counter)
@@ -106,6 +117,7 @@ Note that previous example can be coded in a shorter way:
 - [`Delayer(ms)`](#Delayer)
 - [`Iterator(iterable)`](#Iterator)
 - [`Serializer()`](#Serializer)
+- [`ArraySerializer()`](#ArraySerializer)
 - [`Logger(options={})`](#Logger)
 - [`Identity()`](#Identity)
 
