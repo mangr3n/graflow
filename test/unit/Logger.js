@@ -7,8 +7,8 @@ describe('Logger', () => {
 
     const listenerOutput = spy()
 
-    logger.out.default.on(listenerOutput)
-    logger.in.default.send(2)
+    logger.on(listenerOutput)
+    logger.send(2)
 
     expect(listenerLog).to.have.been.calledOnce
     expect(listenerLog.getCall(0).args[0]).to.be.equal('logger')

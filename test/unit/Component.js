@@ -11,6 +11,6 @@ describe('Component', () => {
       ]
     })
 
-    expect(Comp).to.throw('output stream fo not found!')
+    expect(Comp).to.throw('fo component not found!')
   })
 })

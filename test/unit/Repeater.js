@@ -5,9 +5,9 @@ describe('Repeater', () => {
     const repeater = Repeater(3)
     const listener = spy()
 
-    repeater.out.default.on(listener)
+    repeater.on(listener)
 
-    repeater.in.default.received(1)
+    repeater.send(1)
 
     expect(listener).to.have.been.calledThrice
     expect(listener.getCall(0).args[0]).to.be.equal(1)

@@ -10,8 +10,8 @@ describe('Ticker', () => {
     const timer = Ticker(1000, {value: 'tick', initialDelay: true})
     const listener = spy()
 
-    timer.outputs.default.on(listener)
-    timer.inputs.default.send()
+    timer.on(listener)
+    timer.send()
 
     expect(listener).to.have.not.been.called
 

@@ -10,8 +10,8 @@ describe('Delayer', () => {
     const delayer = Delayer(2000)
     const listener = spy()
 
-    delayer.outputs.default.on(listener)
-    delayer.inputs.default.send(2)
+    delayer.on(listener)
+    delayer.send(2)
 
     expect(listener).to.have.not.been.called
 
