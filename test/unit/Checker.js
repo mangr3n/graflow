@@ -7,10 +7,10 @@ describe('Checker', () => {
     const listenerTrue = spy()
     const listenerFalse = spy()
 
-    isEven.out.true.on(listenerTrue)
-    isEven.out.false.on(listenerFalse)
+    isEven.on('true', listenerTrue)
+    isEven.on('false', listenerFalse)
 
-    isEven.in.default.send(5)
+    isEven.send(5)
 
     expect(listenerTrue).to.have.not.been.called
 

@@ -7,7 +7,7 @@ const Hub = (...inputs) => {
 
   inputs.forEach(i => {
     components[i] = Mapper(v => ({[i]: v}))
-    connections.push([`in.${i}`, i], [i, 'out'])
+    connections.push([`in.${i}`, i], [i, 'out'], ['in', 'out'])
   })
 
   return Component({components, connections, inputs})

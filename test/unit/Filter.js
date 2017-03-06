@@ -9,16 +9,16 @@ describe('Filter', () => {
   })
 
   it('should return a component that emits the input value if condition is true', () => {
-    filter.outputs.default.on(listener)
-    filter.start(5)
+    filter.on(listener)
+    filter.send(5)
 
     expect(listener).to.have.been.calledOnce
     expect(listener.getCall(0).args[0]).to.be.equal(5)
   })
 
   it('should return a component that doesn\'t emit the input value if condition is not true', () => {
-    filter.outputs.default.on(listener)
-    filter.start(-3)
+    filter.on(listener)
+    filter.send(-3)
 
     expect(listener).to.have.been.not.called
   })

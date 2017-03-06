@@ -1,3 +1,8 @@
+### [0.3.0](https://github.com/pmros/graflow/releases/tag/v0.3.0)
+- Component refactoring. New API to send values to a component and to listen to component outputs.
+- New component factories: Memorizer, ArraySerializer and SortedDemuxer.
+- Updated docs.
+
 ### [0.2.3](https://github.com/pmros/graflow/releases/tag/v0.2.3)
 - Cyclic option added to Iterator
 - Logger and Debugger refactored in just Logger

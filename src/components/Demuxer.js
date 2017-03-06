@@ -1,6 +1,5 @@
 import Component from '../Component'
-
-const flatMap = v => [].concat.apply([], v)
+import {flatten} from '../utils'
 
 const Demuxer = (...outputs) => Component({
   components: outputs.reduce((acc, output) => {
@@ -10,10 +9,10 @@ const Demuxer = (...outputs) => Component({
     return acc
   }, {}),
   outputs,
-  connections: flatMap(outputs.map(out => [
-      ['in.default', out],
+  connections: flatten(outputs.map(out => [
+      ['in', out],
       [out, `out.${out}`]
-  ]))
+  ])).concat([['in', 'out']])
 })
 
 export default Demuxer

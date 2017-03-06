@@ -12,13 +12,13 @@ describe('Guard', () => {
     const listenerGreaterThan10 = spy()
     const listenerLesserThan5 = spy()
 
-    checker.out.even.on(listenerEven)
-    checker.out.greaterThan10.on(listenerGreaterThan10)
-    checker.out.lesserThan5.on(listenerLesserThan5)
+    checker.on('even', listenerEven)
+    checker.on('greaterThan10', listenerGreaterThan10)
+    checker.on('lesserThan5', listenerLesserThan5)
 
     const input = 12
 
-    checker.in.default.send(input)
+    checker.send(input)
 
     expect(listenerEven).to.have.been.calledOnce
     expect(listenerEven.getCall(0).args[0]).to.be.equal(input)

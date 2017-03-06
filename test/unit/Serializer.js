@@ -5,9 +5,9 @@ describe('Serializer', () => {
     const iterator = Serializer()
     const listener = spy()
 
-    iterator.out.default.on(listener)
+    iterator.on(listener)
 
-    iterator.in.default.send([1, 2])
+    iterator.send([1, 2])
 
     expect(listener).to.have.been.calledTwice
     expect(listener.getCall(0).args[0]).to.be.equal(1)

@@ -5,19 +5,19 @@ describe('Hub', () => {
     const hub = Hub('a', 'b')
     const listener = spy()
 
-    hub.out.default.on(listener)
+    hub.on(listener)
 
-    hub.in.a.send(1)
+    hub.send('a', 1)
 
     expect(listener).to.have.been.calledOnce
     expect(listener.getCall(0).args[0]).to.be.deep.equal({a: 1})
 
-    hub.in.b.send(2)
+    hub.send('b', 2)
 
     expect(listener).to.have.been.calledTwice
     expect(listener.getCall(1).args[0]).to.be.deep.equal({b: 2})
 
-    hub.in.a.send(10)
+    hub.send('a', 10)
 
     expect(listener).to.have.been.calledThrice
     expect(listener.getCall(2).args[0]).to.be.deep.equal({a: 10})

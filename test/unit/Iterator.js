@@ -5,19 +5,19 @@ describe('Iterator', () => {
     const iterator = Iterator([1, 2])
     const listener = spy()
 
-    iterator.out.default.on(listener)
+    iterator.on(listener)
 
-    iterator.in.default.send()
+    iterator.send()
 
     expect(listener).to.have.been.calledOnce
     expect(listener.getCall(0).args[0]).to.be.equal(1)
 
-    iterator.in.default.send()
+    iterator.send()
 
     expect(listener).to.have.been.calledTwice
     expect(listener.getCall(1).args[0]).to.be.equal(2)
 
-    iterator.in.default.send()
+    iterator.send()
 
     expect(listener).to.have.been.calledTwice
   })
@@ -26,19 +26,19 @@ describe('Iterator', () => {
     const iterator = Iterator([1, 2], {cyclic: true})
     const listener = spy()
 
-    iterator.out.default.on(listener)
+    iterator.on(listener)
 
-    iterator.in.default.send()
+    iterator.send()
 
     expect(listener).to.have.been.calledOnce
     expect(listener.getCall(0).args[0]).to.be.equal(1)
 
-    iterator.in.default.send()
+    iterator.send()
 
     expect(listener).to.have.been.calledTwice
     expect(listener.getCall(1).args[0]).to.be.equal(2)
 
-    iterator.in.default.send()
+    iterator.send()
 
     expect(listener).to.have.been.calledThrice
     expect(listener.getCall(2).args[0]).to.be.equal(1)
