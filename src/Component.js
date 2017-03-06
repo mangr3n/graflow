@@ -1,124 +1,99 @@
-const toComponent = arg => {
-  if (typeof arg === 'object') return arg
-  let node = toNode(arg)
+import {arrayToObject, applyAndEmpty,
+  isFunction, isUndefined, unique} from './utils'
+
+const componentFromFunction = func => {
+  const node = toNode(func)
+
   return {
-    start: (v = {}) => node.received(v),
+    send: (value = {}) => node.send(value),
+    on: handler => node.on(handler),
     inputs: { default: node },
-    outputs: { default: node },
-    in: { default: node },
-    out: { default: node }
+    outputs: { default: node }
   }
 }
 
 const toNode = arg => {
-  let result = arg
-  if (typeof arg === 'function') {
-    result = node(arg)
-  }
-  return result
+  if (isFunction(arg)) return node(arg)
+  return arg
 }
 
 const node = onNext => {
   const queue = []
   const listeners = []
-  const next = v => {
-    listeners.forEach(l => l.addToQueue(v))
-    listeners.forEach(l => l.processQueue())
+
+  const broadcast = (arg, value = {}) => {
+    arg.forEach(l => l.addToQueue(value))
+    arg.forEach(l => l.processQueue())
   }
 
-  const obj = {
-    addListener (listener) { listeners.push(toNode(listener)) },
-    on (listener) { obj.addListener(listener) },
-    connect (listener) { obj.addListener(listener) },
-    addToQueue (v) { queue.push(v) },
-    received (v = {}) {
-      obj.addToQueue(v)
-      obj.processQueue()
-    },
-    send (v = {}) { obj.received(v) },
-    processQueue () {
-      const values = queue.length
-      for (let i = 1; i <= values; i++) {
-        let v = queue.shift()
-        onNext(v, next)
-      }
-    }
+  const next = v => broadcast(listeners, v)
+
+  const addListener = node => listeners.push(node)
+  const on = handler => addListener(toNode(handler))
+  const addToQueue = v => queue.push(v)
+  const processQueue = () => applyAndEmpty(queue, v => onNext(v, next))
+
+  const send = (value = {}) => {
+    addToQueue(value)
+    processQueue()
   }
 
-  return obj
+  return {on, send, addListener, addToQueue, processQueue}
 }
 
-const select = (name, components, io = 'input') => {
-  const direction = io === 'input' ? 'inputs' : 'outputs'
-  let [componentName, streamName] = name.split('.', 2)
-  let ioStreams
+const selectNode = (name, components, io = 'inputs') => {
+  const direction = io === 'inputs' ? 'inputs' : 'outputs'
+  let [componentName, nodeName = 'default'] = name.split('.', 2)
+
   const component = components[componentName]
-
-  if (component !== undefined) {
-    ioStreams = component[direction]
-    if (ioStreams !== undefined && streamName === undefined) {
-      const ioNames = Object.keys(ioStreams)
-      if (ioNames.length === 1) streamName = ioNames[0]
-    }
+  if (isUndefined(component)) {
+    throw new Error(`${componentName} component not found!`)
   }
 
-  if (ioStreams === undefined || ioStreams[streamName] === undefined) {
-    throw new Error(`${io} stream ${name} not found!`)
+  const nodes = component[direction]
+
+  if (isUndefined(nodes) || isUndefined(nodes[nodeName])) {
+    throw new Error(`${name} port not found!`)
   }
 
-  return ioStreams[streamName]
+  return nodes[nodeName]
 }
 
-const component2 = ({components,
-  connections = [], inputs = ['default'], outputs = ['default']}) => {
-  Object.keys(components).forEach(key => {
-    components[key] = toComponent(components[key])
-  })
+const componentFromObject = obj => {
+  const {components, connections = [], inputs = [], outputs = []} = obj
 
-  const inNodes = inputs.reduce((acc, i) => {
-    acc[i] = node((v, next) => next(v))
-    return acc
-  }, {})
+  const inputNames = unique(inputs.concat('default'))
+  const outputNames = unique(outputs.concat('default'))
 
-  const outNodes = outputs.reduce((acc, i) => {
-    acc[i] = node((v, next) => next(v))
-    return acc
-  }, {})
+  const toNodes = i => [i, node((v, next) => next(v))]
+  const inNodes = arrayToObject(inputNames, toNodes)
+  const outNodes = arrayToObject(outputNames, toNodes)
 
   components.in = { inputs: inNodes, outputs: inNodes }
   components.out = { inputs: outNodes, outputs: outNodes }
 
   connections.forEach(([from, to]) => {
-    let streamOut = select(from, components, 'output')
-    let streamIn = select(to, components, 'input')
-
-    streamOut.addListener(streamIn)
+    let outNode = selectNode(from, components, 'outputs')
+    let inNode = selectNode(to, components, 'inputs')
+    outNode.addListener(inNode)
   })
 
-  const comp = {
-    start: (initialValues = {default: {}}) => {
-      if (typeof initialValues !== 'object') {
-        initialValues = {default: initialValues}
-      }
-      for (let key in initialValues) {
-        comp.inputs[key].received(initialValues[key])
-      }
-    },
-    inputs: inNodes,
-    outputs: outNodes,
-    in: inNodes,
-    out: outNodes
+  const on = (...args) => {
+    const [handler, name = 'default'] = args.splice(0, 2).reverse()
+    outNodes[name].on(handler)
   }
 
-  return comp
+  const send = (...args) => {
+    const [value = {}, name = 'default'] = args.splice(0, 2).reverse()
+    inNodes[name].send(value)
+  }
+
+  return {send, on, inputs: inNodes, outputs: outNodes}
 }
 
 const Component = arg => {
-  if (typeof arg === 'function') {
-    return toComponent(arg)
-  } else {
-    return component2(arg)
-  }
+  if (isFunction(arg)) return componentFromFunction(arg)
+  return componentFromObject(arg)
 }
 
 export default Component
