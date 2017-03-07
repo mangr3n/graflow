@@ -56,7 +56,7 @@ A component example:
   myComponent.send(2)
 ```
 
-If you run that code, you'll see this result:
+[Try it online](https://www.webpackbin.com/bins/-KecjX2KqEQzZtXATCMj)! The result is:
 ```
   3
   4
