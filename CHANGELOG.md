@@ -1,3 +1,6 @@
+### [0.3.1](https://github.com/pmros/graflow/releases/tag/v0.3.1)
+- Hot fix
+
 ### [0.3.0](https://github.com/pmros/graflow/releases/tag/v0.3.0)
 - Component refactoring. New API to send values to a component and to listen to component outputs.
 - New component factories: Memorizer, ArraySerializer and SortedDemuxer.
