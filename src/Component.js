@@ -29,7 +29,7 @@ const node = onNext => {
   const next = v => broadcast(listeners, v)
 
   const addListener = node => listeners.push(node)
-  const on = handler => addListener(toNode(handler))
+  const on = handler => addListener(toNode(v => handler(v)))
   const addToQueue = v => queue.push(v)
   const processQueue = () => applyAndEmpty(queue, v => onNext(v, next))
 
