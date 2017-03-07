@@ -324,7 +324,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	    return listeners.push(node);
 	  };
 	  var on = function on(handler) {
-	    return addListener(toNode(handler));
+	    return addListener(toNode(function (v) {
+	      return handler(v);
+	    }));
 	  };
 	  var addToQueue = function addToQueue(v) {
 	    return queue.push(v);

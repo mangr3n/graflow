@@ -1,3 +1,6 @@
+### [0.3.2](https://github.com/pmros/graflow/releases/tag/v0.3.2)
+- Component `on` method fixed
+
 ### [0.3.1](https://github.com/pmros/graflow/releases/tag/v0.3.1)
 - Hot fix
 
