@@ -71,7 +71,7 @@ It doesn't look awesome, I know. But this is just little example. The important 
 - Easy to **compose** (map and filter are just components, like myComponent).
 - Easy to **sketch** graphically.
 
-![example01 diagram](https://rawgit.com/pmros/graflow/master/diagrams/example01.svg)
+![example diagram](https://rawgit.com/pmros/graflow/master/examples/upto/UpTo.svg)
 
 Note that previous example can be coded in a shorter way:
 ```js
@@ -84,6 +84,8 @@ Note that previous example can be coded in a shorter way:
   myComponent.on(console.log)
   myComponent.send(2)
 ```
+
+[More examples](examples).
 
 ## <a name="Component"></a> Component
 A graflow component is an object with async inputs and outputs (also called ports). Every component has at least a `default` input and a `default` output.

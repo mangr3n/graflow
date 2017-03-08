@@ -12,6 +12,9 @@ const Instrumenter = isparta.Instrumenter
 const mochaGlobals = require('./test/setup/.globals')
 const manifest = require('./package.json')
 
+var merge = require('merge-stream')
+var fs = require('fs')
+
 // Load all of our Gulp plugins
 const $ = loadPlugins()
 
@@ -37,12 +40,6 @@ function lint (files) {
       breakOnError: true,
       quiet: true
     }))
-/*
-  return gulp.src(files)
-    .pipe($.eslint())
-    .pipe($.eslint.format())
-    .pipe($.eslint.failAfterError());
-*/
 }
 
 function lintSrc () {
@@ -73,7 +70,7 @@ function build () {
       externals: {},
       module: {
         loaders: [
-          {test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader'}
+          {test: /\.js$/, exclude: /node_modules|examples/, loader: 'babel-loader'}
         ]
       },
       devtool: 'source-map'
@@ -94,6 +91,48 @@ function _mocha () {
       globals: Object.keys(mochaGlobals.globals),
       ignoreLeaks: false
     }))
+}
+
+function getFolders (dir) {
+  return fs.readdirSync(dir)
+    .filter(function (file) {
+      return fs.statSync(path.join(dir, file)).isDirectory()
+    })
+}
+
+function buildExamples () {
+  var folders = getFolders('examples')
+
+  var tasks = folders.map(function (folder) {
+    return gulp.src(path.join(`examples/${folder}`, 'app.js'))
+      .pipe(webpackStream({
+        output: {
+          filename: 'app.js',
+          libraryTarget: 'umd',
+          library: 'app'
+        },
+        externals: {},
+        module: {
+          loaders: [
+            {
+              test: /\.js$/,
+              exclude: /node_modules/,
+              loader: 'babel-loader'
+            }
+          ]
+        },
+        devtool: 'source-map'
+      }))
+      .pipe(gulp.dest(`examples/${folder}/dist`))
+      .pipe($.filter(['**', '!**/*.js.map']))
+      .pipe($.rename('app.min.js'))
+      .pipe($.sourcemaps.init({loadMaps: true}))
+      .pipe($.uglify())
+      .pipe($.sourcemaps.write('./'))
+      .pipe(gulp.dest(`examples/${folder}/dist`))
+  })
+
+  return merge(tasks)
 }
 
 function _registerBabel () {
@@ -151,9 +190,9 @@ function testBrowser () {
       module: {
         loaders: [
           // This is what allows us to author in future JavaScript
-          {test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader'},
+          {test: /\.js$/, exclude: /node_modules|examples/, loader: 'babel-loader'},
           // This allows the test setup scripts to load `package.json`
-          {test: /\.json$/, exclude: /node_modules/, loader: 'json-loader'}
+          {test: /\.json$/, exclude: /node_modules|examples/, loader: 'json-loader'}
         ]
       },
       plugins: [
@@ -194,6 +233,8 @@ gulp.task('lint', ['lint-src', 'lint-test', 'lint-gulpfile'])
 
 // Build two versions of the library
 gulp.task('build', ['lint', 'clean'], build)
+
+gulp.task('examples:build', ['build'], buildExamples)
 
 // Lint and run our tests
 gulp.task('test', ['lint'], test)
