@@ -1,8 +1,8 @@
-import SimpleCycle from '../../../examples/simpleCycle/SimpleCycle'
+import UpTo from '../../../examples/upto/UpTo'
 
 describe('examples/UpTo', () => {
   it('should return a component that emits values from input value to limit', () => {
-    const comp = SimpleCycle(5)
+    const comp = UpTo(5)
     const listener = spy()
 
     comp.on(listener)
