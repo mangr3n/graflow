@@ -137,6 +137,9 @@ Arguments:
 
 ## TODO
 - [ ] Better documentation
+- [ ] A logo
+- [ ] An easier way to define connections
 - [ ] More component factories
 - [ ] More tests
 - [ ] Performance tests
+
