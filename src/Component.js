@@ -1,14 +1,29 @@
-import {arrayToObject, applyAndEmpty,
-  isFunction, isUndefined, unique} from './utils'
+import {
+  arrayToObject,
+  applyAndEmpty,
+  isFunction,
+  isUndefined,
+  unique
+} from './utils'
 
-const componentFromFunction = func => {
+let _componentId = 0
+
+const nextId = () => _componentId++
+
+const componentFromFunction = (func, name = '') => {
   const node = toNode(func)
 
   return {
     send: (value = {}) => node.send(value),
     on: handler => node.on(handler),
-    inputs: { default: node },
-    outputs: { default: node }
+    inputs: {
+      default: node
+    },
+    outputs: {
+      default: node
+    },
+    id: node.id,
+    name
   }
 }
 
@@ -38,7 +53,14 @@ const node = onNext => {
     processQueue()
   }
 
-  return {on, send, addListener, addToQueue, processQueue}
+  return {
+    on,
+    send,
+    addListener,
+    addToQueue,
+    processQueue,
+    id: nextId()
+  }
 }
 
 const selectNode = (name, components, io = 'inputs') => {
@@ -60,7 +82,13 @@ const selectNode = (name, components, io = 'inputs') => {
 }
 
 const componentFromObject = obj => {
-  const {components, connections = [], inputs = [], outputs = []} = obj
+  const {
+    components,
+    connections = [],
+    inputs = [],
+    outputs = [],
+    name = ''
+  } = obj
 
   const inputNames = unique(inputs.concat('default'))
   const outputNames = unique(outputs.concat('default'))
@@ -69,8 +97,14 @@ const componentFromObject = obj => {
   const inNodes = arrayToObject(inputNames, toNodes)
   const outNodes = arrayToObject(outputNames, toNodes)
 
-  components.in = { inputs: inNodes, outputs: inNodes }
-  components.out = { inputs: outNodes, outputs: outNodes }
+  components.in = {
+    inputs: inNodes,
+    outputs: inNodes
+  }
+  components.out = {
+    inputs: outNodes,
+    outputs: outNodes
+  }
 
   connections.forEach(([from, to]) => {
     let outNode = selectNode(from, components, 'outputs')
@@ -88,7 +122,14 @@ const componentFromObject = obj => {
     inNodes[name].send(value)
   }
 
-  return {send, on, inputs: inNodes, outputs: outNodes}
+  return {
+    send,
+    on,
+    inputs: inNodes,
+    outputs: outNodes,
+    id: nextId(),
+    name
+  }
 }
 
 const Component = arg => {

@@ -1,5 +1,6 @@
 import Component from '../Component'
 
+// Chain takes a list of Components and chains the inputs to the outputs.
 const Chain = (...args) => {
   const lastIndex = args.length - 1
   const [first, last] = [args[0], args[lastIndex]]

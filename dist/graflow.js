@@ -280,7 +280,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	var _utils = __webpack_require__(2);
 	
+	var _componentId = 0;
+	
+	var nextId = function nextId() {
+	  return _componentId++;
+	};
+	
 	var componentFromFunction = function componentFromFunction(func) {
+	  var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
+	
 	  var node = toNode(func);
 	
 	  return {
@@ -291,8 +299,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    on: function on(handler) {
 	      return node.on(handler);
 	    },
-	    inputs: { default: node },
-	    outputs: { default: node }
+	    inputs: {
+	      default: node
+	    },
+	    outputs: {
+	      default: node
+	    },
+	    id: node.id,
+	    name: name
 	  };
 	};
 	
@@ -344,7 +358,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    processQueue();
 	  };
 	
-	  return { on: on, send: send, addListener: addListener, addToQueue: addToQueue, processQueue: processQueue };
+	  return {
+	    on: on,
+	    send: send,
+	    addListener: addListener,
+	    addToQueue: addToQueue,
+	    processQueue: processQueue,
+	    id: nextId()
+	  };
 	};
 	
 	var selectNode = function selectNode(name, components) {
@@ -379,7 +400,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	      _obj$inputs = obj.inputs,
 	      inputs = _obj$inputs === undefined ? [] : _obj$inputs,
 	      _obj$outputs = obj.outputs,
-	      outputs = _obj$outputs === undefined ? [] : _obj$outputs;
+	      outputs = _obj$outputs === undefined ? [] : _obj$outputs,
+	      _obj$name = obj.name,
+	      name = _obj$name === undefined ? '' : _obj$name;
 	
 	
 	  var inputNames = (0, _utils.unique)(inputs.concat('default'));
@@ -393,8 +416,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	  var inNodes = (0, _utils.arrayToObject)(inputNames, toNodes);
 	  var outNodes = (0, _utils.arrayToObject)(outputNames, toNodes);
 	
-	  components.in = { inputs: inNodes, outputs: inNodes };
-	  components.out = { inputs: outNodes, outputs: outNodes };
+	  components.in = {
+	    inputs: inNodes,
+	    outputs: inNodes
+	  };
+	  components.out = {
+	    inputs: outNodes,
+	    outputs: outNodes
+	  };
 	
 	  connections.forEach(function (_ref) {
 	    var _ref2 = _slicedToArray(_ref, 2),
@@ -435,7 +464,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    inNodes[name].send(value);
 	  };
 	
-	  return { send: send, on: on, inputs: inNodes, outputs: outNodes };
+	  return {
+	    send: send,
+	    on: on,
+	    inputs: inNodes,
+	    outputs: outNodes,
+	    id: nextId(),
+	    name: name
+	  };
 	};
 	
 	var Component = function Component(arg) {
@@ -765,6 +801,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 	
+	// Chain takes a list of Components and chains the inputs to the outputs.
 	var Chain = function Chain() {
 	  for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
 	    args[_key] = arguments[_key];
