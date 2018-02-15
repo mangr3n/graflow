@@ -16,6 +16,7 @@ const componentFromFunction = (func, name = '') => {
   return {
     send: (value = {}) => node.send(value),
     on: handler => node.on(handler),
+    off: id => node.off(id),
     inputs: {
       default: node
     },
@@ -34,19 +35,26 @@ const toNode = arg => {
 
 const node = onNext => {
   const queue = []
-  const listeners = []
+  const listeners = {}
 
   const broadcast = (arg, value = {}) => {
     arg.forEach(l => l.addToQueue(value))
     arg.forEach(l => l.processQueue())
   }
 
-  const next = v => broadcast(listeners, v)
+  const next = v => broadcast(Object.values(listeners), v)
 
-  const addListener = node => listeners.push(node)
+  const addListener = node => {
+    listeners[node.id] = node
+    return node.id
+  }
+  const removeListener = id => {
+    delete listeners[id]
+  }
   const on = handler => addListener(toNode(v => handler(v)))
   const addToQueue = v => queue.push(v)
   const processQueue = () => applyAndEmpty(queue, v => onNext(v, next))
+  const off = id => removeListener(id)
 
   const send = (value = {}) => {
     addToQueue(value)
@@ -55,6 +63,7 @@ const node = onNext => {
 
   return {
     on,
+    off,
     send,
     addListener,
     addToQueue,
@@ -114,7 +123,12 @@ const componentFromObject = obj => {
 
   const on = (...args) => {
     const [handler, name = 'default'] = args.splice(0, 2).reverse()
-    outNodes[name].on(handler)
+    return outNodes[name].on(handler)
+  }
+
+  const off = (...args) => {
+    const [id, name = 'default'] = args.splice(0, 2).reverse()
+    return outNodes[name].off(id)
   }
 
   const send = (...args) => {
@@ -125,6 +139,7 @@ const componentFromObject = obj => {
   return {
     send,
     on,
+    off,
     inputs: inNodes,
     outputs: outNodes,
     id: nextId(),
