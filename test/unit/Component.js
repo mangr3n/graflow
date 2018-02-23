@@ -8,7 +8,8 @@ const GoodComponent = () => Component({
   connections: [
     ['in', 'foo'],
     ['foo', 'out']
-  ]
+  ],
+  debug: ['in', 'foo', 'out']
 })
 
 describe('Component', () => {

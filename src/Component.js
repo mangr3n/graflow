@@ -96,9 +96,11 @@ const componentFromObject = obj => {
     connections = [],
     inputs = [],
     outputs = [],
+    debug = [],
     name = ''
   } = obj
 
+  const id = nextId()
   const inputNames = unique(inputs.concat('default'))
   const outputNames = unique(outputs.concat('default'))
 
@@ -119,6 +121,11 @@ const componentFromObject = obj => {
     let outNode = selectNode(from, components, 'outputs')
     let inNode = selectNode(to, components, 'inputs')
     outNode.addListener(inNode)
+  })
+
+  debug.forEach((nodeName) => {
+    let debugNode = selectNode(nodeName, components, 'outputs')
+    debugNode.on(v => console.log(`DEBUG Component(${name}:${id}).${nodeName}: `, v))
   })
 
   const on = (...args) => {
@@ -142,7 +149,7 @@ const componentFromObject = obj => {
     off,
     inputs: inNodes,
     outputs: outNodes,
-    id: nextId(),
+    id,
     name
   }
 }
