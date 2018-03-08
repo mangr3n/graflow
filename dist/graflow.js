@@ -319,6 +319,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	
 	var node = function node(onNext) {
+	  var id = nextId();
 	  var queue = [];
 	  var listeners = {};
 	
@@ -375,7 +376,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    addListener: addListener,
 	    addToQueue: addToQueue,
 	    processQueue: processQueue,
-	    id: nextId()
+	    id: id
 	  };
 	};
 	
@@ -465,9 +466,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _args$splice$reverse2 = _slicedToArray(_args$splice$reverse, 2),
 	        handler = _args$splice$reverse2[0],
 	        _args$splice$reverse3 = _args$splice$reverse2[1],
-	        name = _args$splice$reverse3 === undefined ? 'default' : _args$splice$reverse3;
+	        nodeName = _args$splice$reverse3 === undefined ? 'default' : _args$splice$reverse3;
 	
-	    return outNodes[name].on(handler);
+	    if ((0, _utils.isUndefined)(outNodes[nodeName])) throw new Error('Component(' + name + ':' + id + ')/on: outNodes[' + nodeName + '] not found');
+	    return outNodes[nodeName].on(handler);
 	  };
 	
 	  var off = function off() {
@@ -479,9 +481,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _args$splice$reverse5 = _slicedToArray(_args$splice$reverse4, 2),
 	        id = _args$splice$reverse5[0],
 	        _args$splice$reverse6 = _args$splice$reverse5[1],
-	        name = _args$splice$reverse6 === undefined ? 'default' : _args$splice$reverse6;
+	        nodeName = _args$splice$reverse6 === undefined ? 'default' : _args$splice$reverse6;
 	
-	    return outNodes[name].off(id);
+	    if ((0, _utils.isUndefined)(outNodes[nodeName])) throw new Error('Component(' + name + ':' + id + ')/off: outNodes[' + nodeName + '] not found');
+	    return outNodes[nodeName].off(id);
 	  };
 	
 	  var send = function send() {
@@ -494,9 +497,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        _args$splice$reverse9 = _args$splice$reverse8[0],
 	        value = _args$splice$reverse9 === undefined ? {} : _args$splice$reverse9,
 	        _args$splice$reverse10 = _args$splice$reverse8[1],
-	        name = _args$splice$reverse10 === undefined ? 'default' : _args$splice$reverse10;
+	        nodeName = _args$splice$reverse10 === undefined ? 'default' : _args$splice$reverse10;
 	
-	    inNodes[name].send(value);
+	    if ((0, _utils.isUndefined)(inNodes[nodeName])) throw new Error('Component(' + name + ':' + id + ')/send: inNodes[' + nodeName + '] not found');
+	    inNodes[nodeName].send(value);
 	  };
 	
 	  return {
@@ -511,7 +515,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	
 	var Component = function Component(arg) {
-	  if ((0, _utils.isFunction)(arg)) return componentFromFunction(arg);
+	  var name = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'Function';
+	
+	  if ((0, _utils.isFunction)(arg)) return componentFromFunction(arg, name);
 	  return componentFromObject(arg);
 	};
 	

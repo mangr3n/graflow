@@ -34,6 +34,7 @@ const toNode = arg => {
 }
 
 const node = onNext => {
+  const id = nextId()
   const queue = []
   const listeners = {}
 
@@ -68,7 +69,7 @@ const node = onNext => {
     addListener,
     addToQueue,
     processQueue,
-    id: nextId()
+    id
   }
 }
 
@@ -129,18 +130,21 @@ const componentFromObject = obj => {
   })
 
   const on = (...args) => {
-    const [handler, name = 'default'] = args.splice(0, 2).reverse()
-    return outNodes[name].on(handler)
+    const [handler, nodeName = 'default'] = args.splice(0, 2).reverse()
+    if (isUndefined(outNodes[nodeName])) throw new Error(`Component(${name}:${id})/on: outNodes[${nodeName}] not found`)
+    return outNodes[nodeName].on(handler)
   }
 
   const off = (...args) => {
-    const [id, name = 'default'] = args.splice(0, 2).reverse()
-    return outNodes[name].off(id)
+    const [id, nodeName = 'default'] = args.splice(0, 2).reverse()
+    if (isUndefined(outNodes[nodeName])) throw new Error(`Component(${name}:${id})/off: outNodes[${nodeName}] not found`)
+    return outNodes[nodeName].off(id)
   }
 
   const send = (...args) => {
-    const [value = {}, name = 'default'] = args.splice(0, 2).reverse()
-    inNodes[name].send(value)
+    const [value = {}, nodeName = 'default'] = args.splice(0, 2).reverse()
+    if (isUndefined(inNodes[nodeName])) throw new Error(`Component(${name}:${id})/send: inNodes[${nodeName}] not found`)
+    inNodes[nodeName].send(value)
   }
 
   return {
@@ -154,8 +158,8 @@ const componentFromObject = obj => {
   }
 }
 
-const Component = arg => {
-  if (isFunction(arg)) return componentFromFunction(arg)
+const Component = (arg, name = 'Function') => {
+  if (isFunction(arg)) return componentFromFunction(arg, name)
   return componentFromObject(arg)
 }
 
