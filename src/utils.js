@@ -4,11 +4,14 @@ const isFunction = arg => typeof arg === 'function'
 const isObject = arg => typeof arg === 'object'
 const isUndefined = arg => arg === undefined
 
-const pairToObject = ([key, value]) => ({[key]: value})
+const pairToObject = ([key, value]) => ({
+  [key]: value
+})
 
 const pairsToObject = arr => arr.reduce(
-  (obj, pair) => ({...obj, ...pairToObject(pair)}),
-  {}
+  (obj, pair) => ({ ...obj,
+    ...pairToObject(pair)
+  }), {}
 )
 
 const arrayToObject = (arr, func) => pairsToObject(arr.map(func))
@@ -24,7 +27,16 @@ const unique = arg => [...new Set(arg)]
 
 const toArray = arg => [].concat(arg)
 
-export {pipe,
-  isFunction, isObject, isUndefined,
-  arrayToObject, pairToObject, pairsToObject,
-  applyAndEmpty, flatten, unique, toArray}
+export {
+  pipe,
+  isFunction,
+  isObject,
+  isUndefined,
+  arrayToObject,
+  pairToObject,
+  pairsToObject,
+  applyAndEmpty,
+  flatten,
+  unique,
+  toArray
+}

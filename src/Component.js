@@ -4,7 +4,9 @@ import {
   isFunction,
   isUndefined,
   unique
-} from './utils'
+}
+from './utils'
+import { isObject } from 'util';
 
 let _componentId = 0
 
@@ -45,14 +47,23 @@ const node = onNext => {
 
   const next = v => broadcast(Object.values(listeners), v)
 
+
   const addListener = node => {
     listeners[node.id] = node
     return node.id
   }
+
   const removeListener = id => {
     delete listeners[id]
   }
-  const on = handler => addListener(toNode(v => handler(v)))
+  const on = handler => {
+    if (isObject(handler)) {
+      return addListener(v)
+    }
+    else {
+      return addListener(toNode(handler))
+    }
+  }
   const addToQueue = v => queue.push(v)
   const processQueue = () => applyAndEmpty(queue, v => onNext(v, next))
   const off = id => removeListener(id)
@@ -121,7 +132,7 @@ const componentFromObject = obj => {
   connections.forEach(([from, to]) => {
     let outNode = selectNode(from, components, 'outputs')
     let inNode = selectNode(to, components, 'inputs')
-    outNode.addListener(inNode)
+    outNode.on((v) => inNode.send(v))
   })
 
   debug.forEach((nodeName) => {

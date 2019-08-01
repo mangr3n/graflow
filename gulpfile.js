@@ -24,37 +24,37 @@ const mainFile = manifest.main
 const destinationFolder = path.dirname(mainFile)
 const exportFileName = path.basename(mainFile, path.extname(mainFile))
 
-function cleanDist (done) {
+function cleanDist(done) {
   del([destinationFolder]).then(() => done())
 }
 
-function cleanTmp (done) {
+function cleanTmp(done) {
   del(['tmp']).then(() => done())
 }
 
 // Lint a set of files
-function lint (files) {
+function lint(files) {
   return gulp.src(files)
     .pipe(standard())
     .pipe(standard.reporter('default', {
-      breakOnError: true,
+      breakOnError: false,
       quiet: true
     }))
 }
 
-function lintSrc () {
+function lintSrc() {
   return lint('src/**/*.js')
 }
 
-function lintTest () {
+function lintTest() {
   return lint('test/**/*.js')
 }
 
-function lintGulpfile () {
+function lintGulpfile() {
   return lint('gulpfile.js')
 }
 
-function build () {
+function build() {
   return gulp.src(path.join('src', config.entryFileName))
     .pipe(webpackStream({
       output: {
@@ -70,7 +70,7 @@ function build () {
       externals: {},
       module: {
         loaders: [
-          {test: /\.js$/, exclude: /node_modules|examples/, loader: 'babel-loader'}
+          { test: /\.js$/, exclude: /node_modules|examples/, loader: 'babel-loader' }
         ]
       },
       devtool: 'source-map'
@@ -78,14 +78,14 @@ function build () {
     .pipe(gulp.dest(destinationFolder))
     .pipe($.filter(['**', '!**/*.js.map']))
     .pipe($.rename(`${exportFileName}.min.js`))
-    .pipe($.sourcemaps.init({loadMaps: true}))
+    .pipe($.sourcemaps.init({ loadMaps: true }))
     .pipe($.uglify())
     .pipe($.sourcemaps.write('./'))
     .pipe(gulp.dest(destinationFolder))
 }
 
-function _mocha () {
-  return gulp.src(['test/setup/node.js', 'test/unit/**/*.js'], {read: false})
+function _mocha() {
+  return gulp.src(['test/setup/node.js', 'test/unit/**/*.js'], { read: false })
     .pipe($.mocha({
       reporter: 'list',
       globals: Object.keys(mochaGlobals.globals),
@@ -93,17 +93,17 @@ function _mocha () {
     }))
 }
 
-function getFolders (dir) {
+function getFolders(dir) {
   return fs.readdirSync(dir)
-    .filter(function (file) {
+    .filter(function(file) {
       return fs.statSync(path.join(dir, file)).isDirectory()
     })
 }
 
-function buildExamples () {
+function buildExamples() {
   var folders = getFolders('examples')
 
-  var tasks = folders.map(function (folder) {
+  var tasks = folders.map(function(folder) {
     return gulp.src(path.join(`examples/${folder}`, 'app.js'))
       .pipe(webpackStream({
         output: {
@@ -113,20 +113,18 @@ function buildExamples () {
         },
         externals: {},
         module: {
-          loaders: [
-            {
-              test: /\.js$/,
-              exclude: /node_modules/,
-              loader: 'babel-loader'
-            }
-          ]
+          loaders: [{
+            test: /\.js$/,
+            exclude: /node_modules/,
+            loader: 'babel-loader'
+          }]
         },
         devtool: 'source-map'
       }))
       .pipe(gulp.dest(`examples/${folder}/dist`))
       .pipe($.filter(['**', '!**/*.js.map']))
       .pipe($.rename('app.min.js'))
-      .pipe($.sourcemaps.init({loadMaps: true}))
+      .pipe($.sourcemaps.init({ loadMaps: true }))
       .pipe($.uglify())
       .pipe($.sourcemaps.write('./'))
       .pipe(gulp.dest(`examples/${folder}/dist`))
@@ -135,16 +133,16 @@ function buildExamples () {
   return merge(tasks)
 }
 
-function _registerBabel () {
+function _registerBabel() {
   require('babel-register')
 }
 
-function test () {
+function test() {
   _registerBabel()
   return _mocha()
 }
 
-function coverage (done) {
+function coverage(done) {
   _registerBabel()
   gulp.src(['src/**/*.js'])
     .pipe($.istanbul({
@@ -162,11 +160,11 @@ function coverage (done) {
 const watchFiles = ['src/**/*', 'test/**/*', 'package.json', '**/.eslintrc']
 
 // Run the headless unit tests as you make changes.
-function watch () {
+function watch() {
   gulp.watch(watchFiles, ['test'])
 }
 
-function testBrowser () {
+function testBrowser() {
   // Our testing bundle is made up of our unit tests, which
   // should individually load up pieces of our application.
   // We also include the browser setup file.
@@ -190,22 +188,23 @@ function testBrowser () {
       module: {
         loaders: [
           // This is what allows us to author in future JavaScript
-          {test: /\.js$/, exclude: /node_modules|examples/, loader: 'babel-loader'},
+          { test: /\.js$/, exclude: /node_modules|examples/, loader: 'babel-loader' },
           // This allows the test setup scripts to load `package.json`
-          {test: /\.json$/, exclude: /node_modules|examples/, loader: 'json-loader'}
+          { test: /\.json$/, exclude: /node_modules|examples/, loader: 'json-loader' }
         ]
       },
       plugins: [
         // By default, webpack does `n=>n` compilation with entry files. This concatenates
         // them into a single chunk.
-        new webpack.optimize.LimitChunkCountPlugin({maxChunks: 1})
+        new webpack.optimize.LimitChunkCountPlugin({ maxChunks: 1 })
       ],
       devtool: 'inline-source-map'
     }, null, () => {
       if (firstBuild) {
-        $.livereload.listen({port: 35729, host: 'localhost', start: true})
+        $.livereload.listen({ port: 35729, host: 'localhost', start: true })
         gulp.watch(watchFiles, ['lint'])
-      } else {
+      }
+      else {
         $.livereload.reload('./tmp/__spec-build.js')
       }
       firstBuild = false
